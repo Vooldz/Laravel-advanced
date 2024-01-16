@@ -9,7 +9,6 @@ class UserService
 {
     public function createUser(array $data): User
     {
-
         // Protecting the password by hashing it.
         $data['password'] = Hash::make($data['password']);
 
