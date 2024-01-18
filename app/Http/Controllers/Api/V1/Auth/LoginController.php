@@ -19,15 +19,6 @@ class LoginController extends BaseController
     }
     public function login(LoginUserRequest $request)
     {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::user();
-            $message['token'] = $user->createToken($user->name)->plainTextToken;
-            $message['name'] = $user->name;
-
-            return $this->successResponse($message);
-        } else {
-            return $this->errorResponse('Invalid Credentials!');
-        }
-        
+        return $this->userService->loginUser($request);
     }
 }
