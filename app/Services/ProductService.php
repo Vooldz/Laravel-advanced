@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
-use App\Models\Product;
-use App\Models\ProductDetails;
 use App\Models\Review;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Events\newProductMail;
+use App\Models\ProductDetails;
+use Illuminate\Support\Facades\Event;
+
 
 class ProductService
 {
@@ -23,6 +26,8 @@ class ProductService
         $product = Product::create($validated);
 
         $product->detail()->create($validated);
+
+        Event::dispatch(new newProductMail($product));
 
         return $product->load('detail');
     }
