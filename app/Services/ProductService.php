@@ -12,7 +12,7 @@ class ProductService
 
     public function getProducts()
     {
-        $products = Product::with('detail');
+        $products = Product::with('detail')->get();
         return $products;
     }
 
