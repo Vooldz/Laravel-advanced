@@ -4,10 +4,16 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Models\product;
 use Illuminate\Http\Request;
+
+use App\Exports\ProductsExport;
+use App\Imports\ProductsImport;
+
 use App\Services\ProductService;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Api\V1\BaseController;
 use App\Http\Requests\Api\V1\StoreProductRequest;
+use App\Http\Requests\Api\V1\ImportProductRequest;
 use App\Http\Requests\Api\V1\UpdateProductRequest;
 
 class ProductController extends BaseController
@@ -65,7 +71,7 @@ class ProductController extends BaseController
      */
     public function update(UpdateProductRequest $request, product $product)
     {
-        $response = $this->productService->updateProduct($request,$product);
+        $response = $this->productService->updateProduct($request, $product);
         return $this->successResponse($response);
     }
 
@@ -75,7 +81,16 @@ class ProductController extends BaseController
     public function destroy(product $product)
     {
         $this->productService->deleteProduct($product);
-        
+
         return $this->successResponse('Product Deleted Successfully!');
+    }
+    public function export()
+    {
+        return Excel::download(new ProductsExport(), 'laravel-advanced-excel.xlsx');
+    }
+    public function import(ImportProductRequest $ImportProductRequest)
+    {
+        Excel::import(new ProductsImport(), $ImportProductRequest->file('file')->store('files'));
+        return $this->successResponse('Excel Imported Successfully!');
     }
 }
