@@ -19,15 +19,19 @@ class ProductService
         return $products;
     }
 
-    public function createProduct(Request $request)
+    public function createProduct($request)
     {
-        $validated = $request->validated();
-
+        
+        if (!is_array($request)){
+            $validated = $request->validated();
+        }else{
+            $validated = $request;
+        }
         $product = Product::create($validated);
 
         $product->detail()->create($validated);
 
-        Event::dispatch(new newProductMail($product));
+        // Event::dispatch(new newProductMail($product));
 
         return $product->load('detail');
     }
@@ -53,11 +57,15 @@ class ProductService
         return $product->load('detail');
     }
 
-    public function deleteProduct(Product $product)
+    public function deleteProduct($product)
     {
-        optional($product->detail)->delete();
-        optional($product->image)->delete();
-        $product->reviews()->delete();
-        $product->delete();
+        if (!is_array($product)){
+            optional($product->detail)->delete();
+            optional($product->image)->delete();
+            $product->reviews()->delete();
+            $product->delete();
+            return;
+        }
+        Product::where('id', $product['id'])->delete();
     }
 }

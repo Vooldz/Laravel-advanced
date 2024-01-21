@@ -26,7 +26,7 @@ class StoreProductRequest extends FormRequest
             'title' => ['required', 'string', 'max:255', 'min:3'],
             'description' => ['string', 'max:5000', 'min:10', 'nullable'],
             'user_id' => ['required',],
-            'size'  => ['required', 'numeric', 'min:1', 'max:100'],
+            'size'  => ['numeric', 'min:1', 'max:100'],
             'color' => ['in:red,green',],
             'price' => ['numeric', 'nullable', 'min:1', 'max:10000000000'],
         ];
