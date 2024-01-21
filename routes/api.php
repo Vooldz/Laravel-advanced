@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\ThirdPartyController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 
 /*
@@ -28,6 +29,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('/products', ProductController::class)->middleware(['auth:sanctum', 'admin']);
     Route::get('/export-excel', [ProductController::class, 'export']);
     Route::post('/import-excel', [ProductController::class, 'import']);
+    Route::get('/get-api', [ThirdPartyController::class, 'index']);
 });
 
 Route::get('/send-email', [EmailController::class, 'sendEmail'])->middleware('auth:sanctum');
